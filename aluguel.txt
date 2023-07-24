@@ -1,19 +1,13 @@
+
 | Aluguel |
-
-Cliente:EWFEFADSF
-
-Data Alugada: 20/07/2023-----------------------------------
-| Aluguel |
-Cliente:EWFEFADSF
-
-Data Alugada: 27/07/2023
+Cliente:JHOÃO PEDRO
+Data Alugada: 13/07/2023
 -----------------------------------
 | Aluguel |
-Cliente:FDGFGS
-
-Data Alugada: 06/07/2023
+Cliente:JHOÃO PEDRO
+Data Alugada: 28/07/2023
 -----------------------------------
 | Aluguel |
-Cliente:FDGFGS
-Data Alugada: 05/07/2023
+Cliente:JHOÃO PEDRO
+Data Alugada: 21/07/2023
 -----------------------------------

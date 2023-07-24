@@ -1,7 +1,7 @@
 from tkinter import *
 import tkinter.messagebox
 from tkinter.ttk import *
-import datetime
+from datetime import datetime
 from tkcalendar import Calendar
 import os
 
@@ -20,6 +20,11 @@ def cadastrar():
     janela_cad.resizable(False,False)
     janela_cad.title("Aluguel - Lazer")
 
+    # Desing
+    quadrado = Canvas(janela_cad, width=400, height=600)
+    quadrado.create_rectangle(10, 10, 290, 290, fill="blue")
+    quadrado.place(x=0,y=0)
+    
     # Nome
     label = Label(janela_cad, text="Nome: ")
     label.place(x=10,y=20)
@@ -54,7 +59,7 @@ def cadastrar():
         arquivo = open("cadastro.txt", "a")
         gravar.append("\nDados\n")
         gravar.append("\nNome:" +  nome)
-        gravar.append("\nCPF" + cpf)
+        gravar.append("\nCPF:" + cpf)
         gravar.append("\nEndereço:" +  endereco)
         gravar.append("\nTelefone:" + telefone)
         gravar.append("\n-----------------------------------")
@@ -124,19 +129,19 @@ def cad_area():
 def alugar():
     if os.path.isfile("cadastro.txt"):
         janela_alugar = Toplevel(janela)
-        janela_alugar.geometry("500x500")
+        janela_alugar.geometry("460x250")
         janela_alugar.resizable(False,False)
         janela_alugar.title("Aluguel - Lazer")
 
         # Deixar o calendario att
-        data_atual = datetime.datetime.now()
+        data_atual = datetime.now()
         ano = data_atual.year
         mes = data_atual.month
         dia = data_atual.day
 
         # Listar Clientes
-        listar_clientes = Listbox(janela_alugar)
-        listar_clientes.place(x=10,y=300)
+        listar_clientes = Listbox(janela_alugar, width= 30)
+        listar_clientes.place(x=270,y=70)
 
         # Carregar nomes dos clientes
         arquivo = open("cadastro.txt", "r")
@@ -149,10 +154,10 @@ def alugar():
 
         # Busca
         label = Label(janela_alugar, text= "Pesquise:")
-        label.place(x=280,y=10)
+        label.place(x=270,y=10)
 
         busca = Entry(janela_alugar)
-        busca.place(x=335,y=10)
+        busca.place(x=325,y=10)
 
         def pesquisar():
             pesquisa = busca.get()
@@ -186,23 +191,30 @@ def alugar():
 
         # carregar alugueis e deixar o calendario marcado 
         gravar = []
-        arquivo = open("aluguel.txt", "r")
-        for linha in arquivo:
-            if "Data Alugada:" in linha:
-                print(linha)
+        if os.path.isfile("aluguel.txt"):
+            arquivo = open("aluguel.txt", "r")
+            for linha in arquivo:
+                if "Data Alugada:" in linha:
 
-                data_al = linha[14:16]
-                data_al = int(data_al)
+                    dia_al = linha[14:16]
+                    dia_al = int(dia_al)
 
-                mes_al = linha[17:19]
-                mes_al = int(mes_al)
+                    mes_al = linha[17:19]
+                    mes_al = int(mes_al)
 
-                ano_al = linha[20:24]
-                ano_al = int(ano_al)
-                
-        calendario.configure(date_pattern= data_al+mes_al+ano_al,selectbackground='red', selectforeground='white')  
+                    ano_al = linha[20:24]
+                    ano_al = int(ano_al)
 
-        arquivo.close()
+                    data = f"{dia_al}/{mes_al}/{ano_al}"
+                    # Tranforma variavel str em datetime
+                    data_time = datetime.strptime(data, "%d/%m/%Y").date()
+                    # Cria um evento no calendario
+                    calendario.calevent_create(data_time, "Evento", "marcado")
+                    # Configura a cor do evento
+                    calendario.tag_config("marcado", background= "red", foreground="black")
+
+            arquivo.close()
+            
 
         def alugar_ar():
             nome = listar_clientes.get(ANCHOR)
@@ -223,14 +235,14 @@ def alugar():
 
         #Botões
         botao =Button(janela_alugar, text= "Alugar", command= alugar_ar)
-        botao.place(x=280,y=50)
+        botao.place(x=270,y=40)
 
     else:
         tkinter.messagebox.showinfo("Aviso","Nenhum cadastro realizado criado!")
 
 
 def relacao():
-    if os.path.isfile("dadosarea.txt"):
+    if os.path.isfile("aluguel.txt"):
         janela_ex = Toplevel(janela)
         janela_ex.geometry("300x300")
         janela_ex.resizable(False,False)
@@ -247,17 +259,20 @@ def relacao():
                 dados.append(linha)
         arquivo.close()
         
+        label = Label(janela_ex, text= "Dados da Área", font= "Arial, 14")
+        label.place(x=90,y=5)
+
         label = Label(janela_ex, text= dados[0])
-        label.place(x=10,y=20)
+        label.place(x=10,y=30)
 
         label = Label(janela_ex, text= dados[1])
-        label.place(x=10,y=70)
+        label.place(x=10,y=50)
 
         label = Label(janela_ex, text= dados[2])
-        label.place(x=10,y=120)
+        label.place(x=10,y=70)
 
-        listar_clientes = Listbox(janela_ex)
-        listar_clientes.place(x=10,y=240)
+        listar_clientes = Listbox(janela_ex, width= 46)
+        listar_clientes.place(x=10,y=130)
 
         arquivo = open("aluguel.txt", "r")
         for linha in arquivo:
@@ -267,6 +282,44 @@ def relacao():
             elif "Data Alugada:" in linha:
                 listar_clientes.insert(END, linha)
         arquivo.close()
+
+        # Pesquisa
+        label = Label(janela_ex, text= "Pesquise:")
+        label.place(x=70,y=100)
+        busca = Entry(janela_ex)
+        busca.place(x=130,y=100)
+
+        def pesquisar():
+                pesquisa = busca.get()
+                pesquisa = pesquisa.upper()
+                arquivo = open("aluguel.txt", "r")
+                achou = False
+                # Limpa a listbox
+                listar_clientes.delete(0, END)
+                for linha in arquivo:
+                    if pesquisa in linha and "Cliente:" in linha:
+                        listar_clientes.insert(END, linha)
+                        achou = True
+                    elif achou == True and "Data Alugada:" in linha:
+                        listar_clientes.insert(END, linha)
+                        achou = False
+                   
+                arquivo.close()
+
+                if  pesquisa == "":
+                    # Limpa a listbox
+                    listar_clientes.delete(0, END)
+                    # Carregar nomes dos clientes
+                    arquivo = open("aluguel.txt", "r")
+                    for linha in arquivo:
+                        if "Cliente:" in linha:
+                            listar_clientes.insert(END,linha)
+                        elif "Data Alugada:" in linha:
+                            listar_clientes.insert(END,linha)
+                        
+                    arquivo.close()
+                
+        busca.bind('<KeyRelease>', lambda event: pesquisar())
         
         def apagar():
             janela_ex = Toplevel(janela)
@@ -274,61 +327,117 @@ def relacao():
             janela_ex.resizable(False,False)
             janela_ex.title("Exibir Dados da Área")
 
-        def ver_dados():
-            listar_clientes.grid()
-            
-
 
         # Botões 
         botao =Button(janela_ex, text= "Apagar Cadastro Área", command= apagar)
-        botao.place(x=110,y=250)
-
-        botao =Button(janela_ex, text= "Ver", command= ver_dados)
-        botao.place(x=110,y=250)
+        botao.place(x=260,y=40)
 
     else:
-        tkinter.messagebox.showerror("Aviso","Cadastro da área não foi realizado!")
+        tkinter.messagebox.showerror("Aviso","Nenhum aluguel realizado!")
     
 def relatorio():
-    janela_relat = Toplevel(janela)
-    janela_relat.geometry("300x300")
-    janela_relat.resizable(False,False)
-    janela_relat.title("Relatorio")
+    if os.path.isfile("cadastro.txt"):
+        janela_relat = Toplevel(janela)
+        janela_relat.geometry("300x300")
+        janela_relat.resizable(False,False)
+        janela_relat.title("Relatorio")
 
-    listar_clientes = Listbox(janela_relat)
-    listar_clientes.place(x=10,y=240)
+        listar_clientes = Listbox(janela_relat, width= 46, height= 14)
+        listar_clientes.place(x=10,y=40)
 
-    label = Label(janela_relat, text= "Pesquise:")
-    label.place(x=10,y=120)
-    busca = Entry(janela_relat)
-    busca.place(x=180,y=120)
+        # Carregar nomes dos clientes
+        arquivo = open("cadastro.txt", "r")
+        for linha in arquivo:
+            if "Nome:" in linha:
+                nome = linha
+                nome = nome[5:]
+                listar_clientes.insert(END,nome)
+        arquivo.close()
 
-    def pesquisar():
-            pesquisa = busca.get()
-            pesquisa = pesquisa.upper()
+        # Pesquisa
+        label = Label(janela_relat, text= "Pesquise:")
+        label.place(x=70,y=10)
+        busca = Entry(janela_relat)
+        busca.place(x=130,y=10)
 
-            arquivo = open("cadastro.txt", "r")
-            for linha in arquivo:
-                if pesquisa in linha and "Nome:" in linha:
-                    # Limpa a listbox
-                    listar_clientes.delete(0, END)
-                    # Dado da pesquisa
-                    listar_clientes.insert(END, linha[5:])
-            arquivo.close()
+        def pesquisar():
+                pesquisa = busca.get()
+                pesquisa = pesquisa.upper()
 
-            if  pesquisa == "":
-                # Limpa a listbox
-                listar_clientes.delete(0, END)
-                # Carregar nomes dos clientes
                 arquivo = open("cadastro.txt", "r")
                 for linha in arquivo:
-                    if "Nome:" in linha:
-                        nome = linha
-                        nome = nome[5:]
-                        listar_clientes.insert(END,nome)
+                    if pesquisa in linha and "Nome:" in linha:
+                        # Limpa a listbox
+                        listar_clientes.delete(0, END)
+                        # Dado da pesquisa
+                        listar_clientes.insert(END, linha[5:])
                 arquivo.close()
-            
-    busca.bind('<KeyRelease>', lambda event: pesquisar())
+
+                if  pesquisa == "":
+                    # Limpa a listbox
+                    listar_clientes.delete(0, END)
+                    # Carregar nomes dos clientes
+                    arquivo = open("cadastro.txt", "r")
+                    for linha in arquivo:
+                        if "Nome:" in linha:
+                            nome = linha
+                            nome = nome[5:]
+                            listar_clientes.insert(END,nome)
+                    arquivo.close()
+                
+        busca.bind('<KeyRelease>', lambda event: pesquisar())
+
+        def ver_dados():
+            arquivo = open("cadastro.txt", "r")
+            dados = []
+            corrente = 0
+            for linha in arquivo:
+                if listar_clientes.get(ANCHOR) in linha:
+                    corrente = 1
+                    dados.append(linha)
+                elif "CPF:" in linha and corrente == 1:
+                    dados.append(linha)
+                elif "Endereço:" in linha and corrente == 1:
+                    dados.append(linha)
+                elif "Telefone:" in linha and corrente == 1:
+                    dados.append(linha)
+                    break
+            arquivo.close()
+
+            # Desing
+            #canvas = Canvas(janela_relat, width=300, height=200)
+            #canvas.create_rectangle(50, 50, 200, 150, fill="blue")
+            #canvas.pack(fill = BOTH, expand = True)
+        
+            label = Label(janela_relat,text= dados[0])
+            label.pack(fill = BOTH, expand = False)
+
+            label = Label(janela_relat,text= dados[1])
+            label.pack(fill = BOTH, expand = False)
+
+            label = Label(janela_relat,text= dados[2])
+            label.pack(fill = BOTH, expand = False)
+
+            label = Label(janela_relat,text= dados[3])
+            label.pack(fill = BOTH, expand = False)
+
+            def voltar():
+                janela_relat.destroy()
+                relatorio()
+
+            # Botões
+            botao = Button(janela_relat, text= "Voltar", command= voltar)
+            botao.pack(fill = BOTH, expand = True)
+                
+        # Botões
+        botao =Button(janela_relat, text= "Ver", command= ver_dados)
+        botao.place(x=110,y=272)
+
+    else:
+        tkinter.messagebox.showerror("Aviso","Nenhum cadastro realizado!")
+
+    
+
 
 
 
