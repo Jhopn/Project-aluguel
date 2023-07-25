@@ -9,53 +9,76 @@ janela = Tk()
 janela.geometry("300x300")
 janela.resizable(False,False)
 janela.title("Aluguel - Lazer")
+cinza_escuro = "#576665"
+cinza_claro = "#7E8890"
 
-painel = PanedWindow(janela)
-primeira_tela = Frame(painel)
-segunda_tela = Frame(painel)
+# Desing
+quadrado = Canvas(janela, width=310, height=310, background= cinza_escuro)
+quadrado.create_rectangle(15, 15, 295, 295, fill= cinza_claro)
+quadrado.place(x=-5,y=-5)
 
 def cadastrar():
     janela_cad = Toplevel(janela)
-    janela_cad.geometry("300x300")
+    janela_cad.geometry("300x380")
     janela_cad.resizable(False,False)
-    janela_cad.title("Aluguel - Lazer")
+    janela_cad.title("Cadastro")
+    janela_cad.configure( background= cinza_escuro)
     checargnr = StringVar()
 
     # Desing
-    quadrado = Canvas(janela_cad, width=400, height=600)
-    quadrado.create_rectangle(10, 10, 290, 290, fill="blue")
-    quadrado.place(x=0,y=0)
+    quadrado = Canvas(janela_cad, width=220, height=270, background= cinza_escuro)
+    quadrado.create_rectangle(10, 10, 210, 260, fill= cinza_claro)
+    quadrado.place(x=40,y=40)
+
+    # Titulo
+    label = Label(janela_cad, text="                                                                                                      ", font= "Arial, 15", background= cinza_claro)
+    label.place(x=-5,y=10)
+
+    label = Label(janela_cad, text="Cadastro", font= "Arial, 15", background= cinza_claro)
+    label.place(x=110,y=10)
     
     # Nome
-    label = Label(janela_cad, text="Nome: ")
-    label.place(x=10,y=20)
-    entry_nm = Entry(janela_cad)
-    entry_nm.place(x=160,y=20)
+    label = Label(janela_cad, text="Nome: ", background= cinza_claro)
+    label.place(x=60,y=60)
+    entry_nm = Entry(janela_cad, width= 22)
+    entry_nm.place(x=102,y=60)
     # CPF
-    label = Label(janela_cad, text="CPF: ")
-    label.place(x=10,y=70)
-    entry_cpf = Entry(janela_cad)
-    entry_cpf.place(x=200,y=70)
+    label = Label(janela_cad, text="CPF: ", background= cinza_claro)
+    label.place(x=60,y=100)
+    entry_cpf = Entry(janela_cad, width= 24)
+    entry_cpf.place(x=91,y=100)
     # Endereço
-    label = Label(janela_cad, text="Endereço: ")
-    label.place(x=10,y=120)
+    label = Label(janela_cad, text="Endereço: ", background= cinza_claro)
+    label.place(x=60,y=140)
     entry_end = Entry(janela_cad)
-    entry_end.place(x=200,y=120)
+    entry_end.place(x=115,y=140)
     # Telefone
-    label = Label(janela_cad, text="Telefone: ")
-    label.place(x=10,y=170)
+    label = Label(janela_cad, text="Telefone: ", background= cinza_claro)
+    label.place(x=60,y=180)
     entry_tel = Entry(janela_cad)
-    entry_tel.place(x=200,y=170)
+    entry_tel.place(x=115,y=180)
 
-    # Genero 
-    radio1 = Radiobutton(janela_cad,text = "Feminino", value = "Feminino", var = checargnr)
-    radio1.place(x=10, y=220)
+    # Genêro
+    label = Label(janela_cad, text="Genêro: ", background= cinza_claro)
+    label.place(x=60,y=240)
 
-    radio1 = Radiobutton(janela_cad,text = "Masculino", value = "Masculino", var= checargnr)
-    radio1.place(x=130, y=220)
+    # Radiobuttons
+    radio1 = Radiobutton(janela_cad, value = "Feminino", var = checargnr)
+    radio1.place(x=115, y=210)
+    label = Label(janela_cad, text="Feminino", background= cinza_claro)
+    label.place(x=140,y=210)
 
-    radio2 = Radiobutton(janela_cad,text = "Outro", value = "Outro", var = checargnr)
-    radio2.place(x=190, y=290)
+    radio2 = Radiobutton(janela_cad, value = "Masculino", var= checargnr)
+    radio2.place(x=115, y=240)
+    label = Label(janela_cad, text="Masculino", background= cinza_claro)
+    label.place(x=140,y=240)
+
+    radio3 = Radiobutton(janela_cad, value = "Outro", var = checargnr)
+    radio3.place(x=115, y=270)
+    label = Label(janela_cad, text="Outro", background= cinza_claro)
+    label.place(x=140,y=270)
+
+
     
     def confirmar():
         nome = entry_nm.get()
@@ -85,34 +108,47 @@ def cadastrar():
 
     #Botões
     botao =Button(janela_cad, text= "Confirmar", command= confirmar)
-    botao.place(x=110,y=250)
+    botao.place(x=110,y=330)
 
 def cad_area():
     if os.path.isfile("dadosarea.txt"):
         tkinter.messagebox.showinfo("Aviso","Cadastro já foi realizado!")
     else:
         janela_cad_area = Toplevel(janela)
-        janela_cad_area.geometry("300x300")
+        janela_cad_area.geometry("300x240")
         janela_cad_area.resizable(False,False)
         janela_cad_area.title("Cadastrar Área")
+        janela_cad_area.configure( background= cinza_escuro)
+
+        # Desing
+        quadrado = Canvas(janela_cad_area, width=285, height=140, background= cinza_escuro)
+        quadrado.create_rectangle(10, 10, 275, 130, fill= cinza_claro)
+        quadrado.place(x=5,y=40)
+
+        # Titulo
+        label = Label(janela_cad_area, text="                                                                                                      ", font= "Arial, 15", background= cinza_claro)
+        label.place(x=-5,y=10)
+
+        label = Label(janela_cad_area, text="Cadastro Área", font= "Arial, 15", background= cinza_claro)
+        label.place(x=80,y=10)
 
         # Nome da área
-        label = Label(janela_cad_area, text="Nome da área: ")
-        label.place(x=10,y=20)
-        entry_nm_ar = Entry(janela_cad_area)
-        entry_nm_ar.place(x=130,y=20)
+        label = Label(janela_cad_area, text="Nome da área: ", background= cinza_claro)
+        label.place(x=20,y=60)
+        entry_nm_ar = Entry(janela_cad_area, width= 26)
+        entry_nm_ar.place(x=105,y=60)
 
         # Endereço da área
-        label = Label(janela_cad_area, text="Endereço da área: ")
-        label.place(x=10,y=70)
-        entry_end_ar = Entry(janela_cad_area)
-        entry_end_ar.place(x=130,y=70)
+        label = Label(janela_cad_area, text="Endereço da área: ", background= cinza_claro)
+        label.place(x=20,y=100)
+        entry_end_ar = Entry(janela_cad_area, width= 24)
+        entry_end_ar.place(x=116,y=100)
 
         # Valor da área
-        label = Label(janela_cad_area, text="Valor da área R$: ")
-        label.place(x=10,y=120)
-        entry_valor = Entry(janela_cad_area)
-        entry_valor.place(x=130,y=120)
+        label = Label(janela_cad_area, text="Valor da área R$: ", background= cinza_claro)
+        label.place(x=20,y=140)
+        entry_valor = Entry(janela_cad_area, width= 25)
+        entry_valor.place(x=110,y=140)
 
         def confirmar():
             nome = entry_nm_ar.get()
@@ -133,18 +169,31 @@ def cad_area():
 
         #Botões
         botao =Button(janela_cad_area, text= "Confirmar", command= confirmar)
-        botao.place(x=110,y=250)
+        botao.place(x=110,y=200)
 
 
 def alugar():
     if os.path.isfile("cadastro.txt"):
         janela_alugar = Toplevel(janela)
-        janela_alugar.geometry("500x390")
+        janela_alugar.geometry("495x380")
         janela_alugar.resizable(False,False)
         janela_alugar.title("Aluguel")
+        janela_alugar.configure(background= cinza_escuro)
         checar_cadeira = StringVar()
         checar_cozinha = StringVar()
-    
+
+        # Desing
+        quadrado = Canvas(janela_alugar, width=480, height=330, background= cinza_escuro)
+        quadrado.create_rectangle(10, 10, 470, 320, fill= cinza_claro)
+        quadrado.place(x=5,y=40)
+
+        # Titulo
+        label = Label(janela_alugar, text="                                                                                                      ", font= "Arial, 15", background= cinza_claro)
+        label.place(x=-5,y=10)
+
+        label = Label(janela_alugar, text="Alugar", font= "Arial, 15", background= cinza_claro)
+        label.place(x=220,y=10)
+        
         # Deixar o calendario att
         data_atual = datetime.now()
         ano = data_atual.year
@@ -153,7 +202,7 @@ def alugar():
 
         # Listar Clientes
         listar_clientes = Listbox(janela_alugar, width= 30)
-        listar_clientes.place(x=270,y=70)
+        listar_clientes.place(x=280,y=90)
 
         # Carregar nomes dos clientes
         arquivo = open("cadastro.txt", "r")
@@ -165,16 +214,18 @@ def alugar():
         arquivo.close()
 
         # Busca
-        label = Label(janela_alugar, text= "Pesquise:")
-        label.place(x=270,y=10)
+        label = Label(janela_alugar, text= "Pesquise:", background= cinza_claro)
+        label.place(x=280,y=60)
 
         busca = Entry(janela_alugar)
-        busca.place(x=325,y=10) 
+        busca.place(x=338,y=60) 
 
         # Horario do aluguel
-        label_estado = Label(janela_alugar, text= "Horário: ")
-        label_estado.place(x=20,y=260)
+        label = Label(janela_alugar, text= "Horário: ", background= cinza_claro)
+        label.place(x=20,y=270)
 
+        label = Label(janela_alugar, text= "Início", background= cinza_claro)
+        label.place(x=90,y=250)
         combo_in = Combobox(janela_alugar, width= 5)
         horarios = [
         "00:00", "00:30", "01:00", "01:30", "02:00", "02:30", "03:00", "03:30",
@@ -185,18 +236,30 @@ def alugar():
         "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"]
         combo_in['values'] = (horarios)
         combo_in.current(0)
-        combo_in.place(x=80,y=260)
+        combo_in.place(x=80,y=270)
 
+
+        label = Label(janela_alugar, text= "Término", background= cinza_claro)
+        label.place(x=190,y=250)
         combo_fm = Combobox(janela_alugar, width= 5)
         combo_fm['values'] = (horarios)
         combo_fm.current(0)
-        combo_fm.place(x=190,y=260)
+        combo_fm.place(x=190,y=270)
 
-        # Cadeiras
-        check1 = Checkbutton(janela_alugar, text= "Cadeira", var= checar_cadeira , onvalue="Com cadeira", offvalue="Sem cadeira" )
-        check1.place(x=20,y=290)
-        check2 = Checkbutton(janela_alugar, text= "Cozinha", var= checar_cozinha , onvalue="Com cozinha", offvalue="Sem cozinha")
-        check2.place(x=160,y=290)
+        # Cadeiras e  Cozinha
+        label = Label(janela_alugar, text= "Incluso: ", background= cinza_claro)
+        label.place(x=20,y=310)
+
+        check1 = Checkbutton(janela_alugar, var= checar_cadeira , onvalue="Com cadeira", offvalue="Sem cadeira")
+        check1.place(x=80,y=310)
+        label = Label(janela_alugar, text= "Cadeira", background= cinza_claro)
+        label.place(x=110,y=310)
+
+        check2 = Checkbutton(janela_alugar, var= checar_cozinha , onvalue="Com cozinha", offvalue="Sem cozinha")
+        check2.place(x=190,y=310)
+
+        label = Label(janela_alugar, text= "Cozinha", background= cinza_claro)
+        label.place(x=215,y=310)
 
         def pesquisar():
             pesquisa = busca.get()
@@ -226,10 +289,9 @@ def alugar():
         busca.bind('<KeyRelease>', lambda event: pesquisar())
 
         calendario = Calendar(janela_alugar, selectmode = 'day',year = ano, month = mes,day = dia)
-        calendario.place(x=10,y=20)
+        calendario.place(x=20,y=60)
 
         # carregar alugueis e deixar o calendario marcado 
-        gravar = []
         if os.path.isfile("aluguel.txt"):
             arquivo = open("aluguel.txt", "r")
             for linha in arquivo:
@@ -284,14 +346,14 @@ def alugar():
 
         #Botões
         botao =Button(janela_alugar, text= "Alugar", command= alugar_ar)
-        botao.place(x=270,y=40)
+        botao.place(x=330,y=300)
 
     else:
         tkinter.messagebox.showinfo("Aviso","Nenhum cadastro realizado criado!")
 
 
 def relacao():
-    if os.path.isfile("aluguel.txt"):
+    if os.path.isfile("dadosarea.txt"):
         janela_ex = Toplevel(janela)
         janela_ex.geometry("300x300")
         janela_ex.resizable(False,False)
@@ -326,7 +388,7 @@ def relacao():
         arquivo = open("aluguel.txt", "r")
         for linha in arquivo:
             if "Cliente:" in linha:
-                listar_clientes.insert(END, "\n")
+                listar_clientes.insert(END, "\n------------")
                 listar_clientes.insert(END, linha)
             elif "Data Alugada:" in linha:
                 listar_clientes.insert(END, linha)
@@ -355,7 +417,7 @@ def relacao():
                 listar_clientes.delete(0, END)
                 for linha in arquivo:
                     if pesquisa in linha and "Cliente:" in linha:
-                        listar_clientes.insert(END, "\n")
+                        listar_clientes.insert(END, "\n------------")
                         listar_clientes.insert(END, linha)
                         achou = True
                     elif achou == True and "Data Alugada:" in linha:
@@ -378,7 +440,7 @@ def relacao():
                     arquivo = open("aluguel.txt", "r")
                     for linha in arquivo:
                         if "Cliente:" in linha:
-                            listar_clientes.insert(END, "\n")
+                            listar_clientes.insert(END, "\n------------")
                             listar_clientes.insert(END,linha)
                         elif "Data Alugada:" in linha:
                             listar_clientes.insert(END,linha)
@@ -406,7 +468,7 @@ def relacao():
         botao.place(x=260,y=40)
 
     else:
-        tkinter.messagebox.showerror("Aviso","Nenhum aluguel realizado!")
+        tkinter.messagebox.showerror("Aviso","Cadastro da área não foi realizado!")
     
 def relatorio():
     if os.path.isfile("cadastro.txt"):
