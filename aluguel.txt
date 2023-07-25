@@ -1,13 +1,19 @@
 
 | Aluguel |
-Cliente:JHOÃO PEDRO
-Data Alugada: 13/07/2023
+Cliente:PEDRO LUCAS
+
+Data Alugada: 11/07/2023
+Horário de Inicio:04:00
+Horário de Término:08:00
+Situação Cadeiras:Sem cadeira
+Situação Cozinha:Com cozinha
 -----------------------------------
 | Aluguel |
-Cliente:JHOÃO PEDRO
-Data Alugada: 28/07/2023
------------------------------------
-| Aluguel |
-Cliente:JHOÃO PEDRO
-Data Alugada: 21/07/2023
+Cliente:  LUANA ANTONIETA
+
+Data Alugada: 07/07/2023
+Horário de Inicio: 07:30
+Horário de Término: 20:00
+Situação Cadeiras: Sem cadeira
+Situação Cozinha: Com cozinha
 -----------------------------------

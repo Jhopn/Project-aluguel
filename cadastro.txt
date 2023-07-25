@@ -6,3 +6,19 @@ CPF:5698498
 Endereço:PEDRO PATRÍCIO
 Telefone:998890383
 -----------------------------------
+Dados
+
+Nome:PEDRO LUCAS
+CPF:43985932
+Endereço:RUA 89
+Telefone:89776985
+Genêro:1
+-----------------------------------
+Dados
+
+Nome: LUANA ANTONIETA
+CPF: 9956989
+Endereço: RUA 07
+Telefone: 958639865
+Genêro: Feminino
+-----------------------------------
