@@ -3,6 +3,9 @@ import tkinter.messagebox
 from tkinter.ttk import *
 from datetime import datetime
 from tkcalendar import Calendar
+from PIL import Image, ImageTk
+import requests
+from io import BytesIO
 import os
 
 janela = Tk()
@@ -87,24 +90,38 @@ def cadastrar():
         endereco = entry_end.get()
         endereco = endereco.upper()
         telefone = entry_tel.get()
+        genero = checargnr.get()
 
-        gravar = []
-        arquivo = open("cadastro.txt", "a")
-        gravar.append("\nDados\n")
-        gravar.append("\nNome: " +  nome)
-        gravar.append("\nCPF: " + cpf)
-        gravar.append("\nEndereço: " +  endereco)
-        gravar.append("\nTelefone: " + telefone)
-        gravar.append("\nGenêro: "+ checargnr.get())
-        gravar.append("\n-----------------------------------")
-        arquivo.writelines(gravar)
-        arquivo.close()
-        tkinter.messagebox.showinfo("Aviso","Cadastro realizado!")
-        # Apagar dados confirmados
-        entry_nm.delete(0, END)
-        entry_cpf.delete(0, END)
-        entry_end.delete(0, END)
-        entry_tel.delete(0, END)
+        if nome == "" or cpf == "" or endereco == "" or telefone == "" or genero == "":
+            tkinter.messagebox.showerror("Aviso", "Reveja os dados do cadastro!")
+
+        elif len(cpf) != 11:
+            tkinter.messagebox.showerror("Aviso", "CPF inválido!")
+        
+        elif int in nome:
+            tkinter.messagebox.showerror("Aviso", "Nome inválido!")
+        
+        elif str in telefone:
+            tkinter.messagebox.showerror("Aviso", "Telefone inválido!")
+
+        else:
+            gravar = []
+            arquivo = open("cadastro.txt", "a")
+            gravar.append("\nDados\n")
+            gravar.append("\nNome: " +  nome)
+            gravar.append("\nCPF: " + cpf)
+            gravar.append("\nEndereço: " +  endereco)
+            gravar.append("\nTelefone: " + telefone)
+            gravar.append("\nGenêro: "+ genero)
+            gravar.append("\n-----------------------------------")
+            arquivo.writelines(gravar)
+            arquivo.close()
+            tkinter.messagebox.showinfo("Aviso","Cadastro realizado!")
+            # Apagar dados confirmados
+            entry_nm.delete(0, END)
+            entry_cpf.delete(0, END)
+            entry_end.delete(0, END)
+            entry_tel.delete(0, END)
 
     #Botões
     botao =Button(janela_cad, text= "Confirmar", command= confirmar)
@@ -155,16 +172,19 @@ def cad_area():
             endereco = entry_end_ar.get()
             valor = entry_valor.get()
 
-            gravar = []
-            arquivo = open("dadosarea.txt", "a")
-            gravar.append("Dados\n")
-            gravar.append("\nNome da Área: " +  nome)
-            gravar.append("\nEndereço da Área: " + endereco)
-            gravar.append("\nPreço do Aluguel R$: " +  valor)
-            arquivo.writelines(gravar)
-            arquivo.close()
-            tkinter.messagebox.showinfo("Aviso","Cadastro da área realizado!")
-            janela_cad_area.destroy()
+            if nome == "" or endereco == "" or valor == "":
+                tkinter.messagebox.showerror("Aviso", "Reveja os dados do cadastro!")
+            else:
+                gravar = []
+                arquivo = open("dadosarea.txt", "a")
+                gravar.append("Dados\n")
+                gravar.append("\nNome da Área: " +  nome)
+                gravar.append("\nEndereço da Área: " + endereco)
+                gravar.append("\nPreço do Aluguel R$: " +  valor)
+                arquivo.writelines(gravar)
+                arquivo.close()
+                tkinter.messagebox.showinfo("Aviso","Cadastro da área realizado!")
+                janela_cad_area.destroy()
             
 
         #Botões
@@ -183,8 +203,8 @@ def alugar():
         checar_cozinha = StringVar()
 
         # Desing
-        quadrado = Canvas(janela_alugar, width=480, height=330, background= cinza_escuro)
-        quadrado.create_rectangle(10, 10, 470, 320, fill= cinza_claro)
+        quadrado = Canvas(janela_alugar, width=480, height=280, background= cinza_escuro)
+        quadrado.create_rectangle(10, 10, 470, 270, fill= cinza_claro)
         quadrado.place(x=5,y=40)
 
         # Titulo
@@ -240,26 +260,25 @@ def alugar():
 
 
         label = Label(janela_alugar, text= "Término", background= cinza_claro)
-        label.place(x=190,y=250)
+        label.place(x=162,y=250)
         combo_fm = Combobox(janela_alugar, width= 5)
         combo_fm['values'] = (horarios)
         combo_fm.current(0)
-        combo_fm.place(x=190,y=270)
+        combo_fm.place(x=160,y=270)
 
         # Cadeiras e  Cozinha
         label = Label(janela_alugar, text= "Incluso: ", background= cinza_claro)
-        label.place(x=20,y=310)
-
+        label.place(x=260,y=270)
+        
         check1 = Checkbutton(janela_alugar, var= checar_cadeira , onvalue="Com cadeira", offvalue="Sem cadeira")
-        check1.place(x=80,y=310)
+        check1.place(x=310,y=270)
         label = Label(janela_alugar, text= "Cadeira", background= cinza_claro)
-        label.place(x=110,y=310)
+        label.place(x=333,y=270)
 
         check2 = Checkbutton(janela_alugar, var= checar_cozinha , onvalue="Com cozinha", offvalue="Sem cozinha")
-        check2.place(x=190,y=310)
-
+        check2.place(x=380,y=270)
         label = Label(janela_alugar, text= "Cozinha", background= cinza_claro)
-        label.place(x=215,y=310)
+        label.place(x=410,y=270)
 
         def pesquisar():
             pesquisa = busca.get()
@@ -326,9 +345,8 @@ def alugar():
             else:
                 gravar = []
                 arquivo = open("aluguel.txt", "a")
-                gravar.append("\n| Aluguel |")
                 gravar.append("\nCliente: " +  nome)
-                gravar.append("\nData Alugada: " + calendario.get_date())
+                gravar.append("Data Alugada: " + calendario.get_date())
                 gravar.append("\nHorário de Inicio: " + combo_in.get())
                 gravar.append("\nHorário de Término: " + combo_fm.get())
                 cadeira = checar_cadeira.get()
@@ -339,14 +357,13 @@ def alugar():
                 if cozinha == "":
                     cozinha = "Sem cozinha"
                 gravar.append("\nSituação Cozinha: " + cozinha) 
-                gravar.append("\n-----------------------------------")
                 arquivo.writelines(gravar)
                 arquivo.close()
                 tkinter.messagebox.showinfo("Aviso","Alugado com sucesso!")
 
         #Botões
         botao =Button(janela_alugar, text= "Alugar", command= alugar_ar)
-        botao.place(x=330,y=300)
+        botao.place(x=210,y=330)
 
     else:
         tkinter.messagebox.showinfo("Aviso","Nenhum cadastro realizado criado!")
@@ -355,9 +372,10 @@ def alugar():
 def relacao():
     if os.path.isfile("dadosarea.txt"):
         janela_ex = Toplevel(janela)
-        janela_ex.geometry("300x300")
+        janela_ex.geometry("350x400")
         janela_ex.resizable(False,False)
         janela_ex.title("Exibir Dados da Área")
+        janela_ex.configure( background= cinza_escuro)
 
         dados = []
         arquivo = open("dadosarea.txt", "r")
@@ -370,20 +388,29 @@ def relacao():
                 dados.append(linha)
         arquivo.close()
         
-        label = Label(janela_ex, text= "Dados da Área", font= "Arial, 14")
-        label.place(x=90,y=5)
 
-        label = Label(janela_ex, text= dados[0])
-        label.place(x=10,y=30)
+        # Desing
+        quadrado = Canvas(janela_ex, width=340, height=300, background= cinza_escuro)
+        quadrado.create_rectangle(10, 10, 330, 290, fill= cinza_claro)
+        quadrado.place(x=3,y=40)
 
-        label = Label(janela_ex, text= dados[1])
-        label.place(x=10,y=50)
+        # Titulo
+        label = Label(janela_ex, text="                                                                                                      ", font= "Arial, 15", background= cinza_claro)
+        label.place(x=-5,y=10)
+        label = Label(janela_ex, text= "Dados da Área", font= "Arial, 15", background= cinza_claro)
+        label.place(x=110,y=10)
 
-        label = Label(janela_ex, text= dados[2])
-        label.place(x=10,y=70)
+        label = Label(janela_ex, text= dados[0], background= cinza_claro)
+        label.place(x=20,y=60)
 
-        listar_clientes = Listbox(janela_ex, width= 46)
-        listar_clientes.place(x=10,y=130)
+        label = Label(janela_ex, text= dados[1], background= cinza_claro)
+        label.place(x=20,y=80)
+
+        label = Label(janela_ex, text= dados[2], background= cinza_claro)
+        label.place(x=20,y=100)
+
+        listar_clientes = Listbox(janela_ex, width= 50, height= 10)
+        listar_clientes.place(x=22,y=160)
 
         arquivo = open("aluguel.txt", "r")
         for linha in arquivo:
@@ -403,10 +430,10 @@ def relacao():
         arquivo.close()
 
         # Pesquisa
-        label = Label(janela_ex, text= "Pesquise:")
-        label.place(x=70,y=100)
+        label = Label(janela_ex, text= "Pesquise:", background= cinza_claro)
+        label.place(x=70,y=130)
         busca = Entry(janela_ex)
-        busca.place(x=130,y=100)
+        busca.place(x=130,y=130)
 
         def pesquisar():
                 pesquisa = busca.get()
@@ -455,17 +482,44 @@ def relacao():
                     arquivo.close()
                 
         busca.bind('<KeyRelease>', lambda event: pesquisar())
-        
-        def apagar():
-            janela_ex = Toplevel(janela)
-            janela_ex.geometry("300x300")
-            janela_ex.resizable(False,False)
-            janela_ex.title("Exibir Dados da Área")
 
+        def apagar_aluguel():
+            nome = listar_clientes.get(ANCHOR)
+            if "Cliente:" not in nome:
+                tkinter.messagebox.showerror("Aviso", "Selecione o nome do cliente que deseja cancelar o aluguel!")
+            else:
+                dados = []
+                achou = FALSE
+                arquivo = open("aluguel.txt", "r")
+                for linha in arquivo:
+                    dados.append(linha)
 
-        # Botões 
-        botao =Button(janela_ex, text= "Apagar Cadastro Área", command= apagar)
-        botao.place(x=260,y=40)
+                    if nome in linha:
+                        dados.remove(linha)
+                        achou = True
+                    elif achou == True and 'Data Alugada:' in linha:
+                        dados.remove(linha)
+                    elif achou == True and "Horário de Inicio:" in linha:
+                        dados.remove(linha)
+                    elif achou == True and 'Horário de Término:' in linha:
+                        dados.remove(linha)
+                    elif achou == True and 'Situação Cadeiras:' in linha:
+                        dados.remove(linha)
+                    elif achou == True and 'Situação Cozinha:' in linha:
+                        dados.remove(linha)
+                        achou = False
+                arquivo.close()
+                os.remove("aluguel.txt")
+                arquivo = open("aluguel.txt", "a")
+                arquivo.writelines(dados)
+                arquivo.close()
+                tkinter.messagebox.showinfo("Aviso","Dado apagado!")
+
+        botao =Button(janela_ex, text= "-    Apagar    -\nCadastro Área", command= apagar)
+        botao.place(x=230,y=70)
+
+        botao =Button(janela_ex, text= "Apagar Aluguel", command= apagar_aluguel)
+        botao.place(x=130,y=360)
 
     else:
         tkinter.messagebox.showerror("Aviso","Cadastro da área não foi realizado!")
@@ -473,12 +527,19 @@ def relacao():
 def relatorio():
     if os.path.isfile("cadastro.txt"):
         janela_relat = Toplevel(janela)
-        janela_relat.geometry("300x300")
+        janela_relat.geometry("300x390")
         janela_relat.resizable(False,False)
         janela_relat.title("Relatorio")
+        janela_relat.configure( background= cinza_escuro)
 
-        listar_clientes = Listbox(janela_relat, width= 46, height= 14)
-        listar_clientes.place(x=10,y=40)
+        # Desing
+        quadrado = Canvas(janela_relat, width=290, height=310, background= cinza_escuro)
+        quadrado.create_rectangle(10, 10, 280, 300, fill= cinza_claro)
+        quadrado.place(x=4, y=5)
+
+        #listbox
+        listar_clientes = Listbox(janela_relat, width= 42, height= 14)
+        listar_clientes.place(x=22,y=65)
 
         # Carregar nomes dos clientes
         arquivo = open("cadastro.txt", "r")
@@ -490,10 +551,10 @@ def relatorio():
         arquivo.close()
 
         # Pesquisa
-        label = Label(janela_relat, text= "Pesquise:")
-        label.place(x=70,y=10)
+        label = Label(janela_relat, text= "Pesquise:", background= cinza_claro)
+        label.place(x=70,y=30)
         busca = Entry(janela_relat)
-        busca.place(x=130,y=10)
+        busca.place(x=130,y=30)
 
         def pesquisar():
                 pesquisa = busca.get()
@@ -523,6 +584,7 @@ def relatorio():
         busca.bind('<KeyRelease>', lambda event: pesquisar())
 
         def ver_dados():
+            janela_relat.geometry("200x200")
             arquivo = open("cadastro.txt", "r")
             dados = []
             corrente = 0
@@ -541,10 +603,6 @@ def relatorio():
                     break
             arquivo.close()
 
-            # Desing
-            #canvas = Canvas(janela_relat, width=300, height=200)
-            #canvas.create_rectangle(50, 50, 200, 150, fill="blue")
-            #canvas.pack(fill = BOTH, expand = True)
         
             label = Label(janela_relat,text= dados[0])
             label.pack(fill = BOTH, expand = False)
@@ -572,10 +630,106 @@ def relatorio():
                 
         # Botões
         botao =Button(janela_relat, text= "Ver", command= ver_dados)
-        botao.place(x=110,y=272)
+        botao.place(x=115,y=340)
 
     else:
         tkinter.messagebox.showerror("Aviso","Nenhum cadastro realizado!")
+
+def adm():
+    if os.path.isfile("adm.txt"):
+        tkinter.messagebox.showinfo("Aviso","Senha e Usúario já foi cadastrado!")
+    else:
+        janela_ad = Toplevel(janela)
+        janela_ad.geometry("300x200")
+        janela_ad.resizable(False,False)
+        janela_ad.title("Administrador")
+
+        label = Label(janela_ad, text="Defina um usúario e senha!")
+        label.place(x=75,y=10)
+
+        # Usuario
+        label = Label(janela_ad, text="Usúario: ", background= cinza_claro)
+        label.place(x=40,y=60)
+        entry_us = Entry(janela_ad, width= 22)
+        entry_us.place(x=102,y=60)
+
+        # Senha
+        label = Label(janela_ad, text="Senha: ", background= cinza_claro)
+        label.place(x=40,y=100)
+        entry_se = Entry(janela_ad, width= 24)
+        entry_se.place(x=91,y=100)
+
+        def confirmar():
+            gravar = []
+            usuario = entry_us.get()
+            senha = entry_se.get()
+            arquivo = open("adm.txt", "a")
+            gravar.append("\nAdministrção\n")
+            gravar.append("\nUsúario: " +  usuario)
+            gravar.append("\nSenha: " + senha)
+            arquivo.writelines(gravar)
+            arquivo.close()
+            tkinter.messagebox.showinfo("Aviso","Cadastro realizado! Lembre-se de sua senha!")
+            janela_ad.destroy()
+
+        # Botões
+        botao =Button(janela_ad, text= "Confirmar", command= confirmar)
+        botao.place(x=110,y=160)
+
+def apagar():
+    if os.path.isfile("adm.txt"):
+        janela_ad = Toplevel(janela)
+        janela_ad.geometry("300x200")
+        janela_ad.resizable(False,False)
+        janela_ad.title("Administrador")
+
+        label = Label(janela_ad, text="Ao apagar perderá o cadastro da área!")
+        label.place(x=50,y=10)
+
+        # Usuario
+        label = Label(janela_ad, text="Usúario: ", background= cinza_claro)
+        label.place(x=40,y=60)
+        entry_us = Entry(janela_ad, width= 22)
+        entry_us.place(x=102,y=60)
+
+        # Senha
+        label = Label(janela_ad, text="Senha: ", background= cinza_claro)
+        label.place(x=40,y=100)
+        entry_se = Entry(janela_ad, width= 24)
+        entry_se.place(x=91,y=100)
+
+        def confirmar():
+            usuario = entry_us.get()
+            senha = entry_se.get()
+
+            # Carrega a senha e o usúario configurado anteriormente
+            arquivo = open("adm.txt", "r")
+            for linha in arquivo:
+                if "Usúario:" in linha:
+                    usuario_padrao = linha[9:]
+                elif "Senha:" in linha:
+                    senha_padrao = linha[7:]
+            arquivo.close()
+            print(usuario)
+            print(usuario_padrao)
+
+            print(senha)
+            print(senha_padrao)
+
+            # verifica se é a mesma senha e usuario
+            if usuario == usuario_padrao or senha == senha_padrao:
+                os.remove("dadosarea.txt")
+                tkinter.messagebox.showinfo("Aviso", "Dados da área excluídos!")
+            else:
+                tkinter.messagebox.showerror("Aviso", "Senha ou Usúario errado!")
+
+    else:
+        tkinter.messagebox.showerror("Aviso", "Voçê ainda não registrou sua senha e usúario!")
+
+    # Botões
+    botao =Button(janela_ad, text= "Apagar", command= confirmar)
+    botao.place(x=110,y=160)
+    
 
 # Botão
 botao =Button(janela, text= "Cadastrar", command= cadastrar, width= 18)
@@ -593,5 +747,7 @@ botao.place(x=90,y=170)
 botao =Button(janela, text= "Relátorio Clientes", command= relatorio, width= 18)
 botao.place(x=90,y=220)
 
+botao =Button(janela, text= "Administração", command= adm, width= 18)
+botao.place(x=90,y=270)
 
 janela.mainloop()

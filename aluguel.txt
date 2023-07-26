@@ -1,19 +1,12 @@
-
-| Aluguel |
-Cliente:PEDRO LUCAS
-
-Data Alugada: 11/07/2023
-Horário de Inicio:04:00
-Horário de Término:08:00
-Situação Cadeiras:Sem cadeira
-Situação Cozinha:Com cozinha
------------------------------------
-| Aluguel |
-Cliente:  LUANA ANTONIETA
-
-Data Alugada: 07/07/2023
-Horário de Inicio: 07:30
-Horário de Término: 20:00
-Situação Cadeiras: Sem cadeira
-Situação Cozinha: Com cozinha
------------------------------------
+Cliente:  LUISA SOUSA JUNIOR
+Data Alugada: 12/07/2023
+Horï¿½rio de Inicio: 15:30
+Horï¿½rio de Tï¿½rmino: 08:30
+Situaï¿½ï¿½o Cadeiras: Com cadeira
+Situaï¿½ï¿½o Cozinha: Com cozinha
+Cliente: PEDRO LUCAS
+Data Alugada: 29/07/2023
+Horï¿½rio de Inicio: 15:30
+Horï¿½rio de Tï¿½rmino: 10:30
+Situaï¿½ï¿½o Cadeiras: Com cadeira
+Situaï¿½ï¿½o Cozinha: Com cozinha
