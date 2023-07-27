@@ -1,26 +1,39 @@
 import tkinter as tk
-from PIL import Image, ImageTk
-import requests
-from io import BytesIO
 
-# Crie uma janela principal
-janela = tk.Tk()
-janela.title("Exemplo de Imagem da Internet no Tkinter")
+aberto_cad = 0
+janela_cad = None
 
-# URL da imagem que você deseja exibir
-url_imagem = "https://cdn-icons-png.flaticon.com/128/6932/6932392.png"  # Substitua pela URL correta da imagem
+def fechar_janela_cadastro():
+    global janela_cad, aberto_cad
 
-# Faça o download da imagem da internet
-response = requests.get(url_imagem)
-imagem = Image.open(BytesIO(response.content))
-imagem = imagem.resize((40, 40))  # Redimensione a imagem para exibição
+    if janela_cad.winfo_exists():
+        janela_cad.destroy()
 
-# Converta a imagem para o formato compatível com o Tkinter
-imagem_tk = ImageTk.PhotoImage(imagem)
+    aberto_cad = 0
 
-# Crie um widget Label para exibir a imagem
-label_imagem = tk.Label(janela, image=imagem_tk)
-label_imagem.pack()
+def abrir_janela_cadastro():
+    global janela_cad, aberto_cad
 
-# Inicie o loop principal do Tkinter
-janela.mainloop()
+    if aberto_cad <= 2:
+        if not janela_cad or not janela_cad.winfo_exists():
+            janela_cad = tk.Toplevel(raiz)
+            janela_cad.title("Janela de Cadastro")
+            # Adicione os elementos da janela de cadastro aqui
+            # ...
+
+            janela_cad.protocol("WM_DELETE_WINDOW", fechar_janela_cadastro)
+
+        aberto_cad += 1
+        janela_cad.wait_window()
+    else:
+        print("Limite de janelas abertas excedido!")
+
+# Inicialização do Tkinter
+raiz = tk.Tk()
+raiz.title("Exemplo de Janela de Cadastro")
+
+# Exemplo de botão para abrir a janela de cadastro
+botao_abrir = tk.Button(raiz, text="Abrir Cadastro", command=abrir_janela_cadastro)
+botao_abrir.pack()
+
+raiz.mainloop()
