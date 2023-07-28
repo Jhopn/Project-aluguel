@@ -3,17 +3,14 @@ import tkinter.messagebox
 from tkinter.ttk import *
 from datetime import datetime
 from tkcalendar import Calendar
-from PIL import Image, ImageTk
-import requests
-from io import BytesIO
 import os
 
 janela = Tk()
-janela.geometry("300x400")
+janela.geometry("300x320")
 janela.resizable(False,False)
 janela.title("Aluguel - Lazer")
 cinza_escuro = "#576665"
-cinza_claro = "#7E8890"
+cinza_claro = "#93AABD"
 
 # Variaveis globais de controle
 aberto_cad = 0
@@ -41,8 +38,8 @@ aberto_ad_apc = 0
 janela_ad_apc = None
 
 # Desing
-quadrado = Canvas(janela, width=310, height=410, background= cinza_escuro)
-quadrado.create_rectangle(15, 15, 295, 395, fill= cinza_claro)
+quadrado = Canvas(janela, width=310, height=330, background= cinza_escuro)
+quadrado.create_rectangle(15, 15, 295, 315, fill= cinza_claro)
 quadrado.place(x=-5,y=-5)
 
 
@@ -405,7 +402,7 @@ def alugar():
                             # Cria um evento no calendario
                             calendario.calevent_create(data_time, "Evento", "marcado")
                             # Configura a cor do evento
-                            calendario.tag_config("marcado", background= "red", foreground="black")
+                            calendario.tag_config("marcado", background= "blue", foreground="white")
 
                     arquivo.close()
                     
@@ -430,7 +427,8 @@ def alugar():
                         cozinha = checar_cozinha.get()
                         if cozinha == "":
                             cozinha = "Sem cozinha"
-                        gravar.append("\nSituação Cozinha: " + cozinha) 
+                        gravar.append("\nSituação Cozinha: " + cozinha)
+                        gravar.append("\n----------------------")
                         arquivo.writelines(gravar)
                         arquivo.close()
                         tkinter.messagebox.showinfo("Aviso","Alugado com sucesso!")
@@ -504,7 +502,6 @@ def relacao():
                 arquivo = open("aluguel.txt", "r")
                 for linha in arquivo:
                     if "Cliente:" in linha:
-                        listar_clientes.insert(END, "\n------------")
                         listar_clientes.insert(END, linha)
                     elif "Data Alugada:" in linha:
                         listar_clientes.insert(END, linha)
@@ -515,6 +512,8 @@ def relacao():
                     elif "Situação Cadeiras:" in linha:
                         listar_clientes.insert(END, linha)
                     elif "Situação Cozinha:" in linha:
+                        listar_clientes.insert(END, linha)
+                    elif "-------" in linha:
                         listar_clientes.insert(END, linha)
                 arquivo.close()
 
@@ -533,7 +532,6 @@ def relacao():
                         listar_clientes.delete(0, END)
                         for linha in arquivo:
                             if pesquisa in linha and "Cliente:" in linha:
-                                listar_clientes.insert(END, "\n------------")
                                 listar_clientes.insert(END, linha)
                                 achou = True
                             elif achou == True and "Data Alugada:" in linha:
@@ -546,6 +544,8 @@ def relacao():
                                 listar_clientes.insert(END, linha)
                             elif achou == True and "Situação Cozinha:" in linha:
                                 listar_clientes.insert(END, linha)
+                            elif  achou == True and "-------" in linha:
+                                listar_clientes.insert(END, linha)
                                 achou = False
                         arquivo.close()
 
@@ -556,7 +556,6 @@ def relacao():
                             arquivo = open("aluguel.txt", "r")
                             for linha in arquivo:
                                 if "Cliente:" in linha:
-                                    listar_clientes.insert(END, "\n------------")
                                     listar_clientes.insert(END,linha)
                                 elif "Data Alugada:" in linha:
                                     listar_clientes.insert(END,linha)
@@ -568,6 +567,9 @@ def relacao():
                                     listar_clientes.insert(END, linha)
                                 elif "Situação Cozinha:" in linha:
                                     listar_clientes.insert(END, linha)
+                                elif "-------" in linha:
+                                    listar_clientes.insert(END, linha)
+                                    
                             arquivo.close()
                         
                 busca.bind('<KeyRelease>', lambda event: pesquisar())
@@ -576,40 +578,31 @@ def relacao():
                     nome = listar_clientes.get(ANCHOR)
                     if "Cliente:" not in nome:
                         tkinter.messagebox.showerror("Aviso", "Selecione o nome do cliente que deseja cancelar o aluguel!")
-                    
+
                     else:
                         dados = []
-                        achou = FALSE
+                        
+                        # Indice do nome na listbox
+                        indice_list = listar_clientes.curselection()
+                        # Pega da tupla e joga em uma variável inteira
+                        indice = indice_list[0]
+                        indice_int = int(indice)
+                        
                         arquivo = open("aluguel.txt", "r")
 
+                        # adiciona os arquivos na lista
                         for linha in arquivo:
                             dados.append(linha)
-                            if nome in linha:
-                                dados.remove(linha)
-                                achou = True
-                            elif achou == True and 'Data Alugada:' in linha:
-                                dados.remove(linha)
-                        
-                            elif achou == True and "Horário de Inicio:" in linha:
-                                dados.remove(linha)
-                                
-                            elif achou == True and 'Horário de Término:' in linha:
-                                dados.remove(linha)
-                    
-                            elif achou == True and 'Situação Cadeiras:' in linha:
-                                dados.remove(linha)
-                            
-                            elif achou == True and 'Situação Cozinha:' in linha:
-                                dados.remove(linha)
-                            
-                            elif linha =='\n':
-                                dados.remove(linha)
-                                achou = False
-                        print(dados)
+
+                        # Removendo os elementos
+                        dados_novos = dados[:indice_int] + dados[indice_int+7:]
+
                         arquivo.close()
+
+                        # Refaz o arquivo
                         os.remove("aluguel.txt")
                         arquivo = open("aluguel.txt", "a")
-                        arquivo.writelines(dados)
+                        arquivo.writelines(dados_novos)
                         arquivo.close()
                         tkinter.messagebox.showinfo("Aviso","Dado apagado!")
 
